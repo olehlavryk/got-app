@@ -1,12 +1,30 @@
 import React, {Component} from 'react';
-import './randomChar.css';
+
+import styled from 'styled-components';
+
+const RandomCharBlock = styled.div`
+    background-color: #fff;
+    padding: 25px 0 15px 0;
+    margin-bottom: 40px;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+
+    h4 {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .term {
+        font-weight: bold; 
+    }
+`;
 
 export default class RandomChar extends Component {
 
     render() {
 
         return (
-            <div className="random-block rounded">
+            <RandomCharBlock>
                 <h4>Random Character: John</h4>
                 <ul className="list-group list-group-flush">
                     <li className="list-group-item d-flex justify-content-between">
@@ -26,7 +44,7 @@ export default class RandomChar extends Component {
                         <span>Anarchy</span>
                     </li>
                 </ul>
-            </div>
+            </RandomCharBlock>
         );
     }
 }
