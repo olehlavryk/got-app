@@ -1,0 +1,34 @@
+@keyframes ldio-nkb6m22dhul {
+    0% { transform: translate(-50%,-50%) rotate(0deg); }
+    100% { transform: translate(-50%,-50%) rotate(360deg); }
+}
+.ldio-nkb6m22dhul div {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border: 10px solid #3c0f0f;
+    border-top-color: transparent;
+    border-radius: 50%;
+}
+.ldio-nkb6m22dhul div {
+    animation: ldio-nkb6m22dhul 1s linear infinite;
+    top: 50px;
+    left: 50px
+}
+.loadingio-spinner-rolling-hpdxw2m05sd {
+    width: 34px;
+    height: 34px;
+    display: block;
+    overflow: hidden;
+    background: #f1f2f3;
+    margin: 0 auto;
+}
+.ldio-nkb6m22dhul {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform: translateZ(0) scale(0.34);
+    backface-visibility: hidden;
+    transform-origin: 0 0; /* see note above */
+}
+.ldio-nkb6m22dhul div { box-sizing: content-box; }
