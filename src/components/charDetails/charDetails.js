@@ -1,5 +1,15 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
+import gotService from "../../services/GotService";
+import Spinner from '../spinner/';
+import ErrorMessage from "./../errorMessage"
+
+const SelectMessage = styled.div`
+  text-align: center;
+  font-size: 18px;
+  line-height: 26px;
+  color: #fff;
+`;
 
 const CharDetailsBlock = styled.div`
     background-color: #fff;
@@ -17,28 +27,94 @@ const CharDetailsBlock = styled.div`
         font-size: 26px;
     }
 `;
+
 export default class CharDetails extends Component {
 
+    gotService = new gotService();
+
+    state = {
+        char: null,
+        error: false,
+        loading: true,
+    };
+
+    componentDidMount() {
+        this.updateChar();
+    }
+
+    componentDidUpdate(prevProps) {
+        if(this.props.charId != prevProps.charId) {
+            this.updateChar();
+        }
+    }
+
+    onCharDetailsLoaded = (char) => {
+        this.setState({
+            char,
+            loading: false
+        })
+    }
+
+    updateChar() {
+        const {charId} = this.props;
+
+        if(!charId) {
+            return
+        }
+
+        this.setState({
+            loading: true
+        });
+
+        this.gotService.getCharacter(charId)
+            .then(this.onCharDetailsLoaded)
+            .catch( () => this.onError());
+    }
+
+    onError(){
+        this.setState({
+            char: null,
+            error: true
+        })
+    }
+
     render() {
+
+        if (!this.state.char && this.state.error) {
+            return <ErrorMessage/>
+        } else if (!this.state.char) {
+            return <span className="select-error">Please select a character</span>
+        }
+
+        const {name, gender, born, died, culture} = this.state.char;
+
+        if(this.state.loading) {
+            return (
+                <CharDetailsBlock className="rounded">
+                    <Spinner/>
+                </CharDetailsBlock>
+            )
+        }
+
         return (
             <CharDetailsBlock className="rounded">
-                <h4>John Snow</h4>
+                <h4>{name}</h4>
                 <ul className="list-group list-group-flush">
                     <li className="list-group-item d-flex justify-content-between">
                         <span className="term">Gender</span>
-                        <span>male</span>
+                        <span>{gender}</span>
                     </li>
                     <li className="list-group-item d-flex justify-content-between">
                         <span className="term">Born</span>
-                        <span>1783</span>
+                        <span>{born}</span>
                     </li>
                     <li className="list-group-item d-flex justify-content-between">
                         <span className="term">Died</span>
-                        <span>1820</span>
+                        <span>{died}</span>
                     </li>
                     <li className="list-group-item d-flex justify-content-between">
                         <span className="term">Culture</span>
-                        <span>First</span>
+                        <span>{culture}</span>
                     </li>
                 </ul>
             </CharDetailsBlock>
