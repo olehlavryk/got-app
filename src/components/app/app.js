@@ -7,8 +7,10 @@ import ErrorMessage from "../errorMessage";
 import CharacterPage from "../pages/characterPage";
 import BooksPage from "../pages/booksPage";
 import HousesPage from "../pages/housesPage";
-import gotService from "../../services/GotService";
-
+import BooksItem from "../pages/booksItem";
+import NotFoundPage from "../pages/notFoundPage";
+import HomePage from "../pages/homePage";
+import {BrowserRouter as Router, Route, Redirect} from 'react-router-dom';
 
 const ButtonToggle = styled.button`
     padding: 7px 20px;
@@ -26,20 +28,13 @@ const ButtonToggle = styled.button`
 `;
 
 export default class App extends Component  {
-
-    gotService = new gotService()
-
     state = {
         toggleRandomChar: true,
         error: false,
         selectedChar: 130,
     };
 
-    toggleRandomChar = () => {
-        this.setState({
-            toggleRandomChar: !this.state.toggleRandomChar
-        })
-    };
+
 
     componentDidCatch(error, errorInfo) {
         this.setState({
@@ -54,57 +49,34 @@ export default class App extends Component  {
     };
 
     render() {
-        const randomChar = this.state.toggleRandomChar ?  <RandomChar/> : null;
 
         if(this.state.error) {
             return <ErrorMessage/>
         }
 
         return (
-            <>
-                <Container>
-                    <Header />
-                </Container>
-                <Container>
-                    <Row>
-                        <Col lg={{size: 6, offset: 0}}>
-                            <ButtonToggle
-                                onClick={this.toggleRandomChar}>Toggle random character</ButtonToggle>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col lg={{size: 6, offset: 0}}>
-                            { randomChar }
-                        </Col>
-                    </Row>
-                    <CharacterPage />
-                    <BooksPage />
-                    <HousesPage />
-                    {/*<Row>*/}
-                    {/*    <Col md='6'>*/}
-                    {/*        <ItemList*/}
-                    {/*            onItemSelected={this.onItemSelected}*/}
-                    {/*            getData={this.gotService.getAllBooks}*/}
-                    {/*            renderItem={(item) => item.name}/>*/}
-                    {/*    </Col>*/}
-                    {/*    <Col md='6'>*/}
-                    {/*        <CharDetails charId={this.state.selectedChar} />*/}
-                    {/*    </Col>*/}
-                    {/*</Row>*/}
-                    {/*<Row>*/}
-                    {/*    <Col md='6'>*/}
-                    {/*        <ItemList*/}
-                    {/*            onItemSelected={this.onItemSelected}*/}
-                    {/*            getData={this.gotService.getAllHouses}*/}
-                    {/*            renderItem={(item) => item.name}/>*/}
-                    {/*    </Col>*/}
+            <Router>
+                <div className="app">
+                    <Container>
+                        <Header />
+                    </Container>
+                    <Container>
+                        <Route path='/' exact component={HomePage}/>
+                        <Route path='/characters' exact component={CharacterPage}/>
+                        <Route path='/houses' exact component={HousesPage}/>
+                        <Route path='/books' exact component={BooksPage}/>
+                        <Route path='/books/:id' render={
+                            ({match}) => {
+                                const {id} = match.params;
+                                return <BooksItem bookId={id}/>
+                            }
+                        }/>
+                        <Route path="/404" component={NotFoundPage} />
+                        <Redirect to="/404" />
+                    </Container>
+                </div>
+            </Router>
 
-                    {/*    <Col md='6'>*/}
-                    {/*        <CharDetails charId={this.state.selectedChar} />*/}
-                    {/*    </Col>*/}
-                    {/*</Row>*/}
-                </Container>
-            </>
         );
     }
 
